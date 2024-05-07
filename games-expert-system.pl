@@ -127,3 +127,51 @@ semControleCamera(Jogo) :- publicou(sony, Jogo).
 
 % TODO PLATAFORMA 2D POSSUI FASES
 fases(Jogo) :- plataforma2D(Jogo).
+
+% Jogadores
+
+jogador(jose).
+jogador(sabrina).
+jogador(marcos).
+jogador(renata).
+jogador(robson).
+
+jogador(X) :- hardcore(X).   % Pessoas que consomem o máximo de determinados jogos 
+hardcore(renata).
+hardcore(robson).
+
+jogador(X) :- casual(X).     % Pessoas que consomem o mínimo de determinados jogos
+casual(marcos).
+casual(robson).
+
+possui(jose, pcVelho).
+possui(sabrina, pcVelho).
+possui(renata, pcMediano).
+possui(marcos, pcNovo).
+possui(robson, pcNovo).
+
+jogo(Jogo) :- podeJogar(_, Jogo).
+podeJogar(Jogador, _) :- jogador(Jogador).
+podeJogar(Jogador, Jogo) :- possui(Jogador, pcVelho), lancou(Jogo, Ano), Ano < 2000.
+podeJogar(Jogador, Jogo) :- possui(Jogador, pcMediano), lancou(Jogo, Ano), Ano < 2007.
+podeJogar(Jogador, Jogo) :- possui(Jogador, pcNovo).
+
+not(joga(Jogo)) :- not(podeJogar(Jogo)).
+
+usa(jose, tecladoMouse).
+usa(sabrina, gamepad).
+usa(marcos, tecladoMouse).
+usa(marcos, fightingStick).
+usa(renata, fightingStick).
+usa(robson, tecladoMouse).
+usa(robson, gamepad).
+
+%jogoNovo
+%jogoVelho
+
+gosta(marcos, jogoNovo).
+not(gosta(marcos, not(jogoNovo))).
+
+%Multiplayer
+
+%3D vs 2D

@@ -3,8 +3,9 @@ jogo(X) :- publicou(_, X).
 jogo(X) :- jogabilidade3D(X).
 jogo(X) :- jogabilidade2D(X).
 jogo(X) :- genero(_, X).
+jogo(Jogo) :- podeJogar(_, Jogo).  % Relativo a jogadores
 
-%Todos os jogos do domínio possuem um ano de lançamento
+% Todos os jogos do domi?nio possuem um ano de lancamento
 lancou(X, _) :- jogo(X).
 lancou(disneyMagicalQuest3, 1992).
 lancou(megaManX4, 1997).
@@ -37,7 +38,7 @@ lancou(overcooked2, 2016).
 lancou(amongUs, 2018).
 
 
-%PRODUÇÃO
+% Produção
 desenvolveu(travellersTales, legoStarWars).
 
 publicou(sony, crash1).
@@ -46,7 +47,7 @@ publicou(sony, crash3).
 publicou(sony, godOfWar2).
 publicou(sony, godOfWar3).
 
-%Jogabilidade
+% Jogabilidade
 plataforma2D(megamanX4).
 plataforma2D(megamanX5).
 plataforma2D(castlevaniaX).
@@ -136,27 +137,15 @@ jogador(marcos).
 jogador(renata).
 jogador(robson).
 
-jogador(X) :- hardcore(X).   % Pessoas que consomem o máximo de determinados jogos 
+jogador(X) :- hardcore(X).   % Pessoas que consomem determinados jogos com profundidade máxima
 hardcore(renata).
 hardcore(robson).
-
-jogador(X) :- casual(X).     % Pessoas que consomem o mínimo de determinados jogos
-casual(marcos).
-casual(robson).
 
 possui(jose, pcVelho).
 possui(sabrina, pcVelho).
 possui(renata, pcMediano).
 possui(marcos, pcNovo).
 possui(robson, pcNovo).
-
-jogo(Jogo) :- podeJogar(_, Jogo).
-podeJogar(Jogador, _) :- jogador(Jogador).
-podeJogar(Jogador, Jogo) :- possui(Jogador, pcVelho), lancou(Jogo, Ano), Ano < 2000.
-podeJogar(Jogador, Jogo) :- possui(Jogador, pcMediano), lancou(Jogo, Ano), Ano < 2007.
-podeJogar(Jogador, Jogo) :- possui(Jogador, pcNovo).
-
-not(joga(Jogo)) :- not(podeJogar(Jogo)).
 
 usa(jose, tecladoMouse).
 usa(sabrina, gamepad).
@@ -166,12 +155,20 @@ usa(renata, fightingStick).
 usa(robson, tecladoMouse).
 usa(robson, gamepad).
 
-%jogoNovo
-%jogoVelho
+podeJogar(Jogador, _) :- jogador(Jogador).
+podeJogar(Jogador, Jogo) :- possui(Jogador, pcVelho), lancou(Jogo, Ano), Ano < 2001.
+podeJogar(Jogador, Jogo) :- possui(Jogador, pcMediano), lancou(Jogo, Ano), Ano < 2007.
+podeJogar(Jogador, _) :- possui(Jogador, pcNovo).
 
-gosta(marcos, jogoNovo).
-not(gosta(marcos, not(jogoNovo))).
+recomenda(Jogador, Jogo) :- podeJogar(Jogador, Jogo), gosta(Jogador, Jogo).
+gosta(Jogador, Jogo) :- usa(Jogador, fightingStick), genero(luta, Jogo).
+gosta(Jogador, Jogo) :- usa(Jogador, gamepad), publicou(sony, Jogo).
+gosta(Jogador, Jogo) :- usa(Jogador, gamepad), plataforma2D(Jogo).
+gosta(Jogador, Jogo) :- hardcore(Jogador), genero(hackNSlash, Jogo).
 
-%Multiplayer
+gosta(marcos, Jogo) :- jogador(marcos), jogoNovo(Jogo).
+gosta(jose, Jogo) :-  jogador(jose), jogoVelho(Jogo).
 
-%3D vs 2D
+jogoNovo(Jogo) :- lancou(Jogo, Ano), Ano >= 2001.
+
+jogoVelho(Jogo) :- lancou(Jogo, Ano), Ano < 2001.

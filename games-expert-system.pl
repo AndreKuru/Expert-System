@@ -1,12 +1,4 @@
-jogo(X) :- desenvolveu(_, X).
-jogo(X) :- publicou(_, X).
-jogo(X) :- jogabilidade3D(X).
-jogo(X) :- jogabilidade2D(X).
-jogo(X) :- genero(_, X).
-jogo(Jogo) :- podeJogar(_, Jogo).  % Relativo a jogadores
-
 % Todos os jogos do domi?nio possuem um ano de lancamento
-lancou(X, _) :- jogo(X).
 lancou(disneyMagicalQuest3, 1992).
 lancou(megaManX4, 1997).
 lancou(megaManX5, 2000).
@@ -98,9 +90,9 @@ quickTimeEvent(Jogo) :- franquiaGodOfWar(Jogo).
 mapaGeradoAleatoriamente(bindingOfIsaac).
 
 % MAIS DE 4 JOGADORES
-qtdJogadoresMax(Jogo, _) :- jogo(Jogo).
-qtdJogadoresMax4(Jogo, _) :- qtdJogadoresMax(Jogo, _), Jogo =\= amongUs, Jogo =\= left4Dead2.
-qtdJogadoresMax4(_, Qtd) :- Qtd =< 4.
+qtdJogadoresMax4(Jogo, _) :- jogo(Jogo), Jogo \= amongUs, Jogo \= left4Dead2.
+jogo(X) :- lancou(X, _).
+jogo(Jogo) :- podeJogar(_, Jogo).  % Relativo a jogadores
 
 franquiaMetalSlug(metalSlug1).
 franquiaMetalSlug(metalSlug2).

@@ -1,4 +1,4 @@
-% Todos os jogos do domi?nio possuem um ano de lancamento
+% Todos os jogos do domínio possuem um ano de lancamento
 lancou(disneyMagicalQuest3, 1992).
 lancou(megaManX4, 1997).
 lancou(megaManX5, 2000).
@@ -40,8 +40,9 @@ publicou(sony, godOfWar2).
 publicou(sony, godOfWar3).
 
 % Jogabilidade
-plataforma2D(megamanX4).
-plataforma2D(megamanX5).
+plataforma2D(disneyMagicalQuest3).
+plataforma2D(megaManX4).
+plataforma2D(megaManX5).
 plataforma2D(castlevaniaX).
 plataforma2D(metalSlug1).
 plataforma2D(metalSlug2).
@@ -122,14 +123,13 @@ semControleCamera(Jogo) :- publicou(sony, Jogo).
 fases(Jogo) :- plataforma2D(Jogo).
 
 % Jogadores
-
 jogador(jose).
 jogador(sabrina).
 jogador(marcos).
 jogador(renata).
 jogador(robson).
 
-jogador(X) :- hardcore(X).   % Pessoas que consomem determinados jogos com profundidade máxima
+% Pessoas que consomem determinados jogos com profundidade maximizada
 hardcore(renata).
 hardcore(robson).
 
@@ -147,20 +147,19 @@ usa(renata, fightingStick).
 usa(robson, tecladoMouse).
 usa(robson, gamepad).
 
-podeJogar(Jogador, _) :- jogador(Jogador).
 podeJogar(Jogador, Jogo) :- possui(Jogador, pcVelho), lancou(Jogo, Ano), Ano < 2001.
 podeJogar(Jogador, Jogo) :- possui(Jogador, pcMediano), lancou(Jogo, Ano), Ano < 2007.
-podeJogar(Jogador, _) :- possui(Jogador, pcNovo).
+podeJogar(Jogador, Jogo) :- possui(Jogador, pcNovo), lancou(Jogo, _).
 
-recomenda(Jogador, Jogo) :- podeJogar(Jogador, Jogo), gosta(Jogador, Jogo).
+jogoNovo(Jogo) :- lancou(Jogo, Ano), Ano >= 2001.
+jogoVelho(Jogo) :- lancou(Jogo, Ano), Ano < 2001.
+
+gosta(marcos, Jogo) :- jogador(marcos), jogoNovo(Jogo).
+gosta(jose, Jogo) :-  jogador(jose), jogoVelho(Jogo).
+
 gosta(Jogador, Jogo) :- usa(Jogador, fightingStick), genero(luta, Jogo).
 gosta(Jogador, Jogo) :- usa(Jogador, gamepad), publicou(sony, Jogo).
 gosta(Jogador, Jogo) :- usa(Jogador, gamepad), plataforma2D(Jogo).
 gosta(Jogador, Jogo) :- hardcore(Jogador), genero(hackNSlash, Jogo).
 
-gosta(marcos, Jogo) :- jogador(marcos), jogoNovo(Jogo).
-gosta(jose, Jogo) :-  jogador(jose), jogoVelho(Jogo).
-
-jogoNovo(Jogo) :- lancou(Jogo, Ano), Ano >= 2001.
-
-jogoVelho(Jogo) :- lancou(Jogo, Ano), Ano < 2001.
+recomenda(Jogador, Jogo) :- podeJogar(Jogador, Jogo), gosta(Jogador, Jogo).
